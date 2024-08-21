@@ -1,0 +1,32 @@
+<h3>Welcome <%= current_user.email %></h3>
+<ul>
+  <li><a href='#settings'>FAQ's</a></li>
+  <li><%= link_to "Edit User Password", edit_user_registration_path %></li>
+  <li><%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link"%></li>
+</ul>
+
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+
+li a, .nav-link {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color on hover */
+li a:hover, .nav-link:hover {
+  background-color: #555;
+  color: white;
+}
+
+h3 {
+  text-align: center;
+}
+</style>
