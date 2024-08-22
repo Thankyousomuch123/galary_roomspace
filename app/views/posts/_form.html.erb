@@ -1,37 +1,138 @@
-<%= form_with(model: post) do |form| %>
-  <% if post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+<div class="form-container">
+      <h1><%= post.new_record? ? 'New Post' : 'Edit Post' %></h1>
 
-      <ul>
-        <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+      <%= form_with(model: post, local: true) do |form| %>
+        <% if post.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+            <ul>
+              <% post.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
+
+        <div class="field">
+          <%= form.label :title %>
+          <%= form.text_field :title, required: true %>
+        </div>
+
+        <div class="field">
+          <%= form.label :avatar %>
+          <%= form.file_field :avatar, direct_upload: true %>
+        </div>
+
+        <div class="field">
+          <%= form.label :images %>
+          <%= form.file_field :images, multiple: true, direct_upload: true %>
+        </div>
+
+        <div class="field">
+          <%= form.label :content %>
+          <%= form.text_area :content %>
+        </div>
+
+        <div class="actions">
+          <%= form.submit "Save Post" %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title, required: true %>
-  </div>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        margin: 0;
+        padding: 20px;
+      }
 
-  <div class="field">
-    <%= form.label :avatar %>
-    <%= form.file_field :avatar, direct_upload: true %>
-  </div>
+      .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
 
-  <div class="field">
-    <%= form.label :images %>
-    <%= form.file_field :images, multiple: true, direct_upload: true %>
-  </div>
+      h1 {
+        color: #915387;
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-align: center;
+      }
 
-  <div class="field">
-    <%= form.label :content %>
-    <%= form.text_area :content %>
-  </div>
+      .field {
+        margin-bottom: 15px;
+      }
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+      .field label {
+        display: block;
+        font-size: 1em;
+        color: #14042b;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .field input[type="text"],
+      .field input[type="file"],
+      .field textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d1d1;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .field textarea {
+        height: 150px;
+        resize: vertical; /* Allow vertical resizing */
+      }
+
+      #error_explanation {
+        padding: 15px;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        color: #721c24;
+        margin-bottom: 20px;
+      }
+
+      #error_explanation h2 {
+        margin-top: 0;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+
+      #error_explanation ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+      #error_explanation li {
+        margin-bottom: 5px;
+      }
+
+      .actions {
+        text-align: center;
+      }
+
+      .actions input[type="submit"] {
+        background-color: #915387;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .actions input[type="submit"]:hover {
+        background-color: #4a2a60;
+        transform: scale(1.05);
+      }
+    </style>
