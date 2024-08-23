@@ -1,9 +1,76 @@
 <h1>Your Albums</h1>
-<%= link_to 'New Album', new_album_path %>
-<ul>
+<%= link_to 'New Album', new_album_path, class: 'btn btn-primary' %>
+
+<div class="album-list">
   <% @albums.each do |album| %>
-    <li>
-      <%= link_to album.name, album_path(album) %>
-    </li>
+    <div class="album-item">
+      <%= link_to album_path(album), class: 'album-link' do %>
+        <div class="album-avatar">
+          <%= image_tag album.avatar, width: "100px" if album.avatar.attached? %>
+        </div>
+        <div class="album-info">
+          <span class="album-name"><%= album.name %></span>
+        </div>
+      <% end %>
+    </div>
   <% end %>
-</ul>
+</div>
+
+<style>
+  .album-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .album-item {
+    width: 200px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .album-item:hover {
+    transform: scale(1.05);
+  }
+
+  .album-avatar img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .album-info {
+    padding: 10px;
+  }
+
+  .album-name {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+  }
+
+  .btn {
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+  }
+</style>

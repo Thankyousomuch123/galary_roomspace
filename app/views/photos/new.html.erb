@@ -1,14 +1,140 @@
-<h1>New Photo for <%= @album.name %></h1>
-<%= form_with model: [@album, @photo], local: true do |form| %>
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
-  <div>
-    <%= form.label :image %>
-    <%= form.file_field :image %>
-  </div>
-  <div>
-    <%= form.submit 'Add Photo' %>
-  </div>
-<% end %>
+<h1 class="form-title">Add New Photo for Album <%= @album.name %></h1>
+<div class="form-container">
+  <%= form_with model: [@album, @photo], local: true, html: { class: 'photo-form' } do |form| %>
+
+    <% if @photo.errors.any? %>
+      <div class="form-error">
+        <h2><%= pluralize(@photo.errors.count, "error") %> prohibited this photo from being saved:</h2>
+        <ul>
+          <% @photo.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :title, class: 'form-label' %>
+      <%= form.text_field :title, class: 'form-control' %>
+    </div>
+    <div class="form-group">
+      <%= form.label :image, class: 'form-label' %>
+      <%= form.file_field :image, class: 'form-control' %>
+    </div>
+    <div class="form-actions">
+      <%= link_to 'Back', request.referer || albums_path, class: 'btn btn-secondary' %>
+      <%= form.submit 'Add Photo', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>
+
+<style type="text/css">
+  /* Form container */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form elements */
+}
+
+/* Title styling */
+.form-title {
+  margin-left: 50%;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+/* Input field styling */
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Actions styling */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Space between buttons */
+}
+
+/* Button styling */
+.btn {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-primary:focus, .btn-primary:active {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+/* Error message styling */
+.form-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-error h2 {
+  margin: 0;
+}
+
+.form-error ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-error li {
+  margin-bottom: 5px;
+}
+
+</style>

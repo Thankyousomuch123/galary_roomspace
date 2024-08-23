@@ -11,13 +11,13 @@
     <%= link_to "Edit User Password", edit_user_registration_path, class: "menu-link" %>
   </div>
   <div class="menu-item">
-    <%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete, class: "menu-link nav-link" %>
+    <%= button_to "Sign Out", destroy_user_session_path, method: :delete, data: { turbo: "false" }, class: "sign-out" %>
   </div>
 </div>
 
 <style type="text/css">
   #work-area {
-  padding: 20px;
+  margin-top: -64px;
   background-color: #915387;
 }
 
@@ -37,5 +37,28 @@
   background-color: #13012b;
   color: #eab676;
 }
+
+/* Style for the sign-out button only */
+.sign-out {
+  background-color: #915387; /* Background color */
+  color: #ffffff; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for the button */
+  font-size: 1em; /* Font size */
+  font-weight: bold; /* Font weight */
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer; /* Pointer cursor on hover */
+  display: inline-block; /* Ensure padding and margins are respected */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect specifically for the sign-out button */
+.sign-out:hover {
+  background-color: #4a2a60; /* Darker background color on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
 
 </style>
