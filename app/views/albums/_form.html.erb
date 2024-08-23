@@ -1,27 +1,117 @@
-<%= form_with model: @album, local: true do |form| %>
-  <% if @album.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+<div class="form-container">
+  <%= form_with model: @album, local: true do |form| %>
+    <% if @album.errors.any? %>
+      <div class="form-error">
+        <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+        <ul>
+          <% @album.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
 
-      <ul>
-        <% @album.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="form-group">
+      <%= form.label :name, class: 'form-label' %>
+      <%= form.text_field :name, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :avatar, class: 'form-label' %>
+      <%= form.file_field :avatar, direct_upload: true, class: 'form-control' %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit @album.new_record? ? 'Create Album' : 'Update Album', class: 'btn btn-primary' %>
     </div>
   <% end %>
+</div>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
+<style type="text/css">
+  /* Form container */
+  .form-container {
+    max-width: 600px; /* Adjust width as needed */
+    margin: 0 auto; /* Center horizontally */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
 
-  <div class="field">
-    <%= form.label :avatar %>
-    <%= form.file_field :avatar, direct_upload: true %>
-  </div>
+  /* Form styling */
+  .form-group {
+    margin-bottom: 20px;
+  }
 
-  <div class="actions">
-    <%= form.submit @album.new_record? ? 'Create Album' : 'Update Album' %>
-  </div>
-<% end %>
+  .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .form-actions {
+    text-align: right;
+  }
+
+  .btn {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+
+  .btn-primary:focus, .btn-primary:active {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+  }
+
+  /* Error message styling */
+  .form-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+
+  .form-error h2 {
+    margin: 0 0 10px;
+  }
+
+  .form-error ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .form-error li {
+    margin-bottom: 5px;
+  }
+</style>
