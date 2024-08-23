@@ -1,9 +1,6 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-
-  has_many :albums, dependent: :destroy
-  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
@@ -14,7 +11,7 @@ class User < ApplicationRecord
     domain = email.split('@').last
 
     # Define the allowed domain
-    allowed_domain = 'gmail.com'
+    allowed_domain = 'elitmus.com'
 
     # Check if the email's domain matches the allowed domain
     return nil unless domain == allowed_domain

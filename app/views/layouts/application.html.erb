@@ -2,57 +2,28 @@
 <html>
   <head>
     <title>GalarySpace</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' %>
-
-    <style>
-      #left-menu {
-        width: 20%;
-        float: left;
-        margin-right: 20px;
-        background-color: #915387;
-        height: 950px;
-      }
-
-      #work-area {
-        width: 60%;
-        float: left;
-        height: 900px;
-        margin-top: 10%; /* Start work area from 15% from the top */
-      }
-
-      .welcome-message {
-        font-size: 60px; /* Very big font size */
-        color: #14042b;
-        background-color: #eab676;
-        font-weight: bold;
-        width: 78%;
-        float: left;
-        text-align: center;
-      }
-    </style>
   </head>
 
-  <body style="background-color:#eab676;">
+  <body>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <div>
-      <% if user_signed_in? %>
-        <div id="left-menu">
-          <%= render 'shared/navigation' %>
+        <% if user_signed_in? %>
+          <div id="left-menu">
+            <%= render 'shared/navigation' %>
+          </div>
+        <% end %>
+        <div id="work-area">
+          <%= yield %>
         </div>
-      <% end %>
-      <div class="welcome-message">Welcome <%= current_user.email %></div>
-      <div id="work-area">
-        <%= yield %>
-      </div>
 
-      <% unless user_signed_in? %>
+      <% unless user_signed_in?  %>
         <%= link_to "Login", new_user_session_path %>
         <%= link_to "Sign Up", new_user_registration_path %>
       <% end %>
