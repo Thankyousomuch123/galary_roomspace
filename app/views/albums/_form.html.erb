@@ -1,11 +1,4 @@
 <div class="form-container">
-  <!-- Conditional Header and Back Link -->
-  <% if action_name == 'new' %>
-    <h1>Create New Album</h1>
-  <% elsif action_name == 'edit' %>
-    <h1>Edit Album</h1>
-  <% end %>
-
   <%= form_with model: @album, local: true do |form| %>
     <% if @album.errors.any? %>
       <div class="form-error">
@@ -29,8 +22,7 @@
     </div>
 
     <div class="form-actions">
-      <%= link_to 'Back', request.referer || albums_path, class: 'btn btn-secondary' %>
-      <%= form.submit action_name == 'new' ? 'Create Album' : 'Update Album', class: 'btn btn-primary' %>
+      <%= form.submit @album.new_record? ? 'Create Album' : 'Update Album', class: 'btn btn-primary' %>
     </div>
   <% end %>
 </div>
@@ -44,9 +36,6 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between form elements */
   }
 
   /* Form styling */
@@ -70,9 +59,7 @@
   }
 
   .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px; /* Space between buttons */
+    text-align: right;
   }
 
   .btn {
@@ -104,22 +91,6 @@
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
   }
 
-  .btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-    border-color: #6c757d;
-  }
-
-  .btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-  }
-
-  .btn-secondary:focus, .btn-secondary:active {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-  }
-
   /* Error message styling */
   .form-error {
     background-color: #f8d7da;
@@ -128,13 +99,10 @@
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 
   .form-error h2 {
-    margin: 0;
+    margin: 0 0 10px;
   }
 
   .form-error ul {
