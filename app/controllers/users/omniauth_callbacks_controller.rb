@@ -5,7 +5,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     domain = email.split('@').last
 
     # Define the allowed domain
-    allowed_domain = 'gmail.com'
+    allowed_domain = 'elitmus.com'
 
     # Check if the user is from the allowed domain
     if domain == allowed_domain
