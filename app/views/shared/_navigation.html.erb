@@ -1,25 +1,31 @@
 <div id="work-area">
   <img src="<%= image_path('Galary Space.jpeg') %>" alt="Galary Space Logo" width="100%" height="30%">
 
-  <ul>
-    <li><%= link_to "Photo Album", edit_user_registration_path %></li>
-    <li><%= link_to "Video Album", edit_user_registration_path %></li>
-    <li><%= link_to "All Users", users_path %></li>
-    <li><%= link_to "Edit User Password", edit_user_registration_path %></li>
-    <li><%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link"%></li>
-  </ul>
+  <div class="menu-item">
+    <%= link_to "Albums", albums_path, class: "menu-link" %>
+  </div>
+  <div class="menu-item">
+    <%= link_to "All Users", users_path, class: "menu-link" %>
+  </div>
+  <div class="menu-item">
+    <%= link_to "Edit User Password", edit_user_registration_path, class: "menu-link" %>
+  </div>
+  <div class="menu-item">
+    <%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete, class: "menu-link nav-link" %>
+  </div>
 </div>
 
-<style>
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+<style type="text/css">
+  #work-area {
+  padding: 20px;
   background-color: #915387;
 }
 
-li a, .nav-link {
+.menu-item {
   margin-top: 21px;
+}
+
+.menu-link {
   display: block;
   color: #14042b;
   font-size: 25px;
@@ -27,8 +33,7 @@ li a, .nav-link {
   text-decoration: none;
 }
 
-/* Change the link color on hover */
-li a:hover, .nav-link:hover {
+.menu-link:hover, .nav-link:hover {
   background-color: #13012b;
   color: #eab676;
 }
