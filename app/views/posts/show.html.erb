@@ -1,0 +1,44 @@
+<p>
+  <strong>Title:</strong>
+  <%= @post.title %>
+</p>
+
+<p>
+  <strong>Avatar:</strong>
+  <% if @post.avatar.attached? %>
+    <%= image_tag @post.avatar, width: "200px" %>
+    <%= link_to "Delte avatar", purge_avatar_post_path(@post), method: :delete %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Images:</strong>
+  <% if @post.images.attached? %>
+    <% @post.images.each do |attachment| %>
+      <br>
+      <% if attachment.image? %>
+        <%= image_tag attachment, width: "200px" %>
+      <% elsif attachment.audio? %>
+        <audio controls>
+          <source src="<%= rails_blob_url(attachment) %>" type="<%= attachment.content_type %>"/>
+        </audio>
+      <% elsif attachment.video? %>
+        <video controls width="480">
+          <source src="<%= rails_blob_url(attachment) %>" type="<%= attachment.content_type %>"/>
+        </video>
+      <% else %>
+        <%= link_to attachment.filename, rails_blob_path(attachment, disposition: "attachment") %>
+      <% end %>
+      <br>
+      <%= link_to "Delte attachment", purge_attachment_path(attachment), method: :delete %>
+    <% end %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= simple_format(@post.content) %>
+</p>
+
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>

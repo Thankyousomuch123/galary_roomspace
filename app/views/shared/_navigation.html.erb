@@ -1,6 +1,9 @@
-<h3>Welcome <%= current_user.email %></h3>
+<img src="<%= image_path('Galary Space.jpeg') %>" alt="Galary Space Logo" width="100%" height="30%">
+
 <ul>
-  <li><a href='#settings'>FAQ's</a></li>
+  <li><%= link_to "Photo Album", edit_user_registration_path %></li>
+  <li><%= link_to "Video Album", edit_user_registration_path %></li>
+  <li><%= link_to "All Users", users_path %></li>
   <li><%= link_to "Edit User Password", edit_user_registration_path %></li>
   <li><%= link_to "Sign Out", destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link"%></li>
 </ul>
@@ -10,23 +13,21 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: #f1f1f1;
+  background-color: #915387;
 }
 
 li a, .nav-link {
+  margin-top: 21px;
   display: block;
-  color: #000;
+  color: #14042b;
+  font-size: 25px;
   padding: 8px 16px;
   text-decoration: none;
 }
 
 /* Change the link color on hover */
 li a:hover, .nav-link:hover {
-  background-color: #555;
-  color: white;
-}
-
-h3 {
-  text-align: center;
+  background-color: #13012b;
+  color: #eab676;
 }
 </style>
