@@ -1,126 +1,131 @@
-<h1>Posts: <%= Post.count %></h1>
+ <h1>Posts: <%= Post.count %></h1>
 
-<%= link_to 'New Post', new_post_path, class: 'new-post-button' %>
+  <%= link_to 'New Post', new_post_path, class: 'new-post-button' %>
 
-<div class="posts-container">
-  <% @posts.each do |post| %>
-    <div class="post-card">
-      <h2><%= post.title %></h2>
-      <%= image_tag post.avatar, width: "100%", alt: "Avatar" if post.avatar.attached? %>
-      <div class="post-actions">
-        <%= button_to 'Show', post, method: :get, class: 'show-btn' %>
-        <%= button_to 'Edit', edit_post_path(post), method: :get, class: 'edit-btn' %>
-        <%= button_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'destroy-btn' %>
+  <div class="posts-container">
+    <% @posts.each do |post| %>
+      <div class="post-card">
+        <h2><%= post.title %></h2>
+        <p><%= simple_format(post.content) %></p>
+        <%= image_tag post.avatar, width: "100%", alt: "Avatar" if post.avatar.attached? %>
+        <div class="post-actions">
+          <%= link_to 'Show', post, class: 'show' %>
+          <%= link_to 'Edit', edit_post_path(post), class: 'edit' %>
+          <%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'destroy' %>
+        </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #eab676;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eab676;
+    }
 
-  h1 {
-    font-size: 2.5em;
-    color: #14042b;
-    margin-bottom: 20px;
-    text-align: left;
-  }
+    h1 {
+      font-size: 2.5em;
+      color: #14042b;
+      margin-bottom: 20px;
+      text-align: left;
+    }
 
-  .posts-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
-    gap: 15px; /* Space between cards */
-    padding: 10px;
-    border: 1px solid #915387; /* Border around the container */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #ffffff; /* Background color for the container */
-    max-height: 800px; /* Set a maximum height for scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
-    margin: 0 auto; /* Center the container horizontally */
-    max-width: 90%; /* Limit the maximum width */
-  }
+    .posts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
+      gap: 15px; /* Space between cards */
+      padding: 10px;
+      border: 1px solid #915387; /* Border around the container */
+      border-radius: 8px; /* Rounded corners */
+      background-color: #ffffff; /* Background color for the container */
+      max-height: 800px; /* Set a maximum height for scrolling */
+      overflow-y: auto; /* Enable vertical scrolling */
+      margin: 0 auto; /* Center the container horizontally */
+      max-width: 90%; /* Limit the maximum width */
+    }
 
-  .post-card {
-    background-color: #ffffff;
-    border: 1px solid #d1d1d1;
-    border-radius: 8px; /* Rounded corners */
-    padding: 15px; /* Padding inside the card */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Slight shadow */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+    .post-card {
+      background-color: #ffffff;
+      border: 1px solid #d1d1d1;
+      border-radius: 8px; /* Rounded corners */
+      padding: 15px; /* Padding inside the card */
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Slight shadow */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-  .post-card:hover {
-    transform: scale(1.02); /* Slightly enlarge the card on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
-  }
+    .post-card:hover {
+      transform: scale(1.02); /* Slightly enlarge the card on hover */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+    }
 
-  .post-card img {
-    max-width: 100%; /* Ensure image fits within card */
-    border-radius: 8px; /* Rounded corners for image */
-  }
+    .post-card img {
+      max-width: 100%; /* Ensure image fits within card */
+      border-radius: 8px; /* Rounded corners for image */
+    }
 
-  .post-card h2 {
-    font-size: 1.4em; /* Adjusted font size */
-    color: #915387;
-    margin: 0 0 10px;
-  }
+    .post-card h2 {
+      font-size: 1.4em; /* Adjusted font size */
+      color: #915387;
+      margin: 0 0 10px;
+    }
 
-  .post-actions {
-    display: flex;
-    justify-content: space-between; /* Space between buttons */
-    margin-top: 10px;
-  }
+    .post-card p {
+      font-size: 0.9em; /* Adjusted font size */
+      color: #14042b;
+      margin: 0 0 10px;
+      line-height: 1.6;
+    }
 
-  .post-actions form {
-    display: inline-block;
-    margin: 0;
-  }
+    .post-actions {
+      display: flex;
+      gap: 8px; /* Space between actions */
+    }
 
-  .post-actions button {
-    padding: 10px 20px;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px; /* Rounded corners for buttons */
-    font-weight: bold;
-    cursor: pointer;
-  }
+    .post-actions a {
+      display: inline-block;
+      padding: 6px 12px; /* Adjusted padding */
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 4px; /* Rounded corners for buttons */
+      font-weight: bold;
+      text-align: center;
+    }
 
-  .show-btn {
-    background-color: #4caf50; /* Green for Show */
-  }
+    .post-actions a.show {
+      background-color: #4caf50; /* Green for Show */
+    }
 
-  .edit-btn {
-    background-color: #2196f3; /* Blue for Edit */
-  }
+    .post-actions a.edit {
+      background-color: #2196f3; /* Blue for Edit */
+    }
 
-  .destroy-btn {
-    background-color: #f44336; /* Red for Destroy */
-  }
+    .post-actions a.destroy {
+      background-color: #f44336; /* Red for Destroy */
+    }
 
-  .post-actions button:hover {
-    opacity: 0.8; /* Slightly transparent on hover */
-  }
+    .post-actions a:hover {
+      opacity: 0.8; /* Slightly transparent on hover */
+    }
 
-  .new-post-button {
-    display: inline-block;
-    padding: 12px 24px;
-    color: #ffffff;
-    background-color: #915387;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-decoration: none;
-    text-align: center;
-    margin-bottom: 20px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
+    .new-post-button {
+      display: inline-block;
+      padding: 12px 24px;
+      color: #ffffff;
+      background-color: #915387;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      text-align: center;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-  .new-post-button:hover {
-    background-color: #4a2a60; /* Darker shade of the button color on hover */
-    transform: scale(1.05); /* Slightly enlarge the button on hover */
-  }
-</style>
+    .new-post-button:hover {
+      background-color: #4a2a60; /* Darker shade of the button color on hover */
+      transform: scale(1.05); /* Slightly enlarge the button on hover */
+    }
+  </style>
+
+ 
