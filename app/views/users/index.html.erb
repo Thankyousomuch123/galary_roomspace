@@ -1,61 +1,20 @@
 <h1>Users List</h1>
-<div class="users-container">
-  <% @users.each do |user| %>
-    <div class="user-card">
-      <h3>User ID: <%= user.id %></h3>
-      <p><strong>Email:</strong> <%= user.email %></p>
-      <p><strong>Created At:</strong> <%= user.created_at.strftime("%B %d, %Y") %></p>
-    </div>
-  <% end %>
-</div>
 
-<style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #eab676;
-      }
-
-      h1 {
-        font-size: 2.5em;
-        color: #14042b;
-        margin-bottom: 20px;
-        text-align: left;
-      }
-
-      .users-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* Align items to the left */
-        max-height: 80vh; /* Adjust height to fit within viewport */
-        overflow-y: auto; /* Enable vertical scrolling */
-        padding: 10px;
-        gap: 20px;
-        border: 2px solid #14042b; /* Border around the entire container */
-        border-radius: 10px; /* Rounded corners */
-        background-color: #f8f8f8; /* Background color for better contrast */
-      }
-
-      .user-card {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        width: 300px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border: 1px solid #d1d1d1; /* Border around each user card */
-      }
-
-      .user-card h3 {
-        color: #915387;
-        margin-bottom: 10px;
-      }
-
-      .user-card p {
-        margin: 0;
-        font-size: 1.2em;
-        color: #14042b;
-      }
-
-      .user-card p strong {
-        font-weight: bold;
-      }
-    </style>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.email %></td>
+        <td><%= user.created_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
