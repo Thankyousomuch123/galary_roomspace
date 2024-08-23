@@ -1,20 +1,65 @@
 <h1>Users List</h1>
+<div class="users-container">
+  <% @users.each do |user| %>
+    <div class="user-card">
+      <h3>User ID: <%= user.id %></h3>
+      <p><strong>Email:</strong> <%= user.email %></p>
+      <p><strong>Created At:</strong> <%= user.created_at.strftime("%B %d, %Y") %></p>
+    </div>
+  <% end %>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Email</th>
-      <th>Created At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.id %></td>
-        <td><%= user.email %></td>
-        <td><%= user.created_at %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #eab676;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    color: #14042b;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .users-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    border: 2px solid #14042b;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    max-height: 75vh;
+    overflow-y: auto;
+    justify-content: center; /* Center-aligns the cards within the container */
+  }
+
+  .user-card {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    flex: 0 1 30%; /* Sets the width of each card to approximately 30% of the container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d1d1d1;
+    box-sizing: border-box; /* Ensures padding and border are included in the width calculation */
+    word-wrap: break-word;
+  }
+
+  .user-card h3 {
+    color: #915387;
+    margin-bottom: 10px;
+  }
+
+  .user-card p {
+    margin: 0;
+    font-size: 1.2em;
+    color: #14042b;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .user-card p strong {
+    font-weight: bold;
+  }
+</style>
