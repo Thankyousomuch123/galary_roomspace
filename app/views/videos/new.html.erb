@@ -1,17 +1,12 @@
+<h1 class="form-title">Add New Video for <%= @album.name %> Album</h1>
 <div class="form-container">
-  <!-- Conditional Header and Back Link -->
-  <% if action_name == 'new' %>
-    <h1>Create New <%= @album.album_type.capitalize %> Album</h1>
-  <% elsif action_name == 'edit' %>
-    <h1>Edit <%= @album.album_type.capitalize %> Album</h1>
-  <% end %>
+  <%= form_with model: [@album, @video], local: true, html: { class: 'video-form' } do |form| %>
 
-  <%= form_with model: @album, local: true do |form| %>
-    <% if @album.errors.any? %>
+    <% if @video.errors.any? %>
       <div class="form-error">
-        <h2><%= pluralize(@album.errors.count, "error") %> prohibited this album from being saved:</h2>
+        <h2><%= pluralize(@video.errors.count, "error") %> prohibited this video from being saved:</h2>
         <ul>
-          <% @album.errors.full_messages.each do |message| %>
+          <% @video.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
@@ -19,28 +14,16 @@
     <% end %>
 
     <div class="form-group">
-      <%= form.label :name, class: 'form-label' %>
-      <%= form.text_field :name, class: 'form-control' %>
+      <%= form.label :title, class: 'form-label' %>
+      <%= form.text_field :title, class: 'form-control' %>
     </div>
-
     <div class="form-group">
-      <%= form.label :avatar, class: 'form-label' %>
-      <%= form.file_field :avatar, direct_upload: true, class: 'form-control' %>
+      <%= form.label :file, class: 'form-label' %>
+      <%= form.file_field :file, class: 'form-control' %>
     </div>
-
-    <!-- Hidden Field to Set Album Type (only on new) -->
-    <% if action_name == 'new' %>
-      <%= form.hidden_field :album_type, value: @album.album_type %>
-    <% else %>
-      <div class="form-group">
-        <%= form.label :album_type, 'Album Type', class: 'form-label' %>
-        <%= form.text_field :album_type, class: 'form-control', disabled: true %>
-      </div>
-    <% end %>
-
     <div class="form-actions">
       <%= link_to 'Back', request.referer || albums_path, class: 'btn btn-secondary' %>
-      <%= form.submit action_name == 'new' ? "Create #{@album.album_type.capitalize} Album" : "Update #{@album.album_type.capitalize} Album", class: 'btn btn-primary' %>
+      <%= form.submit 'Add Video', class: 'btn btn-primary' %>
     </div>
   <% end %>
 </div>
@@ -48,8 +31,8 @@
 <style type="text/css">
   /* Form container */
   .form-container {
-    max-width: 600px; /* Adjust width as needed */
-    margin: 0 auto; /* Center horizontally */
+    max-width: 600px;
+    margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -59,11 +42,21 @@
     gap: 20px; /* Space between form elements */
   }
 
-  /* Form styling */
+  /* Title styling */
+  .form-title {
+    margin-left: 50%;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* Form group styling */
   .form-group {
     margin-bottom: 20px;
   }
 
+  /* Label styling */
   .form-label {
     display: block;
     font-weight: 600;
@@ -71,6 +64,7 @@
     color: #333;
   }
 
+  /* Input field styling */
   .form-control {
     width: 100%;
     padding: 10px;
@@ -79,12 +73,14 @@
     box-sizing: border-box;
   }
 
+  /* Actions styling */
   .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 10px; /* Space between buttons */
   }
 
+  /* Button styling */
   .btn {
     display: inline-block;
     font-size: 16px;
@@ -114,22 +110,6 @@
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
   }
 
-  .btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-    border-color: #6c757d;
-  }
-
-  .btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
-  }
-
-  .btn-secondary:focus, .btn-secondary:active {
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
-  }
-
   /* Error message styling */
   .form-error {
     background-color: #f8d7da;
@@ -156,4 +136,5 @@
   .form-error li {
     margin-bottom: 5px;
   }
+
 </style>

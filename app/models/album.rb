@@ -1,12 +1,18 @@
 class Album < ApplicationRecord
   belongs_to :user
   has_many :photos, dependent: :destroy
+  has_many :videos, dependent: :destroy
   has_many :shared_albums, dependent: :destroy
   has_many :shared_users, through: :shared_albums, source: :user
+
+  validates :album_type, inclusion: { in: ['photo', 'video'] }
 
   validates :name, presence: true
   has_one_attached :avatar
   validate :avatar_validation
+
+  scope :photo_albums, -> { where(album_type: 'photo') }
+  scope :video_albums, -> { where(album_type: 'video') }
 
   def avatar_validation
     if avatar.attached?

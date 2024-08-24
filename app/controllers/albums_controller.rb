@@ -15,7 +15,7 @@ class AlbumsController < ApplicationController
   end
 
   def new
-    @album = current_user.albums.new
+    @album = current_user.albums.new(album_type: params[:album_type])
   end
 
   def create
@@ -54,10 +54,10 @@ class AlbumsController < ApplicationController
   private
 
   def set_album
-	  @album = current_user.albums.find(params[:id])
-	end
+    @album = current_user.albums.find(params[:id])
+  end
 
   def album_params
-    params.require(:album).permit(:name, :avatar)
+    params.require(:album).permit(:name, :avatar, :album_type)
   end
 end

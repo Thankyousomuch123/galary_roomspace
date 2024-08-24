@@ -1,8 +1,27 @@
 <h1>Your Albums</h1>
-<%= link_to 'New Album', new_album_path, class: 'btn btn-primary' %>
 
+<%= link_to 'New Photo Album', new_album_path(album_type: 'photo'), class: 'btn btn-primary' %>
+<%= link_to 'New Video Album', new_album_path(album_type: 'video'), class: 'btn btn-secondary' %>
+
+<h2>Photo Albums</h2>
 <div class="album-list">
-  <% @albums.each do |album| %>
+  <% @albums.where(album_type: 'photo').each do |album| %>
+    <div class="album-item">
+      <%= link_to album_path(album), class: 'album-link' do %>
+        <div class="album-avatar">
+          <%= image_tag album.avatar, width: "100px" if album.avatar.attached? %>
+        </div>
+        <div class="album-info">
+          <span class="album-name"><%= album.name %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<h2>Video Albums</h2>
+<div class="album-list">
+  <% @albums.where(album_type: 'video').each do |album| %>
     <div class="album-item">
       <%= link_to album_path(album), class: 'album-link' do %>
         <div class="album-avatar">
@@ -65,12 +84,23 @@
     font-weight: bold;
     text-decoration: none;
     color: #fff;
-    background-color: #007bff;
     border-radius: 5px;
     text-align: center;
   }
 
-  .btn:hover {
+  .btn-primary {
+    background-color: #007bff;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+  }
+
+  .btn-primary:hover {
     background-color: #0056b3;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
   }
 </style>
