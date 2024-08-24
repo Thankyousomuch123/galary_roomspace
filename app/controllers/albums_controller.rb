@@ -42,15 +42,6 @@ class AlbumsController < ApplicationController
     @users = User.where.not(id: current_user.id)
   end
 
-  def update_share
-    user_ids = params[:shared_user_ids] || []
-    @album.shared_albums.where.not(user_id: user_ids).destroy_all
-    user_ids.each do |user_id|
-      SharedAlbum.find_or_create_by(album: @album, user_id: user_id)
-    end
-    redirect_to @album
-  end
-
   private
 
   def set_album

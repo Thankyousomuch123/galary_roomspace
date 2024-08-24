@@ -34,16 +34,7 @@ class PhotosController < ApplicationController
     # Ensure that sharing functionality is appropriate for photos
     @users = User.where.not(id: current_user.id)
   end
-
-  def update_share
-    user_ids = params[:shared_user_ids] || []
-    @photo.shared_photos.where.not(user_id: user_ids).destroy_all
-    user_ids.each do |user_id|
-      SharedPhoto.find_or_create_by(photo: @photo, user_id: user_id)
-    end
-    redirect_to album_path(@album)
-  end
-
+  
   def destroy
     if @photo.destroy
       redirect_to album_path(@album), notice: 'Photo was successfully deleted.'

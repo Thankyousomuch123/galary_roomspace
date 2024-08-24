@@ -35,14 +35,6 @@ class VideosController < ApplicationController
     @users = User.where.not(id: current_user.id)
   end
 
-  def update_share
-    user_ids = params[:shared_user_ids] || []
-    @video.shared_videos.where.not(user_id: user_ids).destroy_all
-    user_ids.each do |user_id|
-      SharedVideo.find_or_create_by(video: @video, user_id: user_id)
-    end
-    redirect_to album_path(@album)
-  end
 
   def destroy
     if @video.destroy

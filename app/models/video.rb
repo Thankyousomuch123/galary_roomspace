@@ -1,8 +1,6 @@
 class Video < ApplicationRecord
   belongs_to :album
   has_one_attached :file # Assuming Active Storage is used
-  has_many :shared_videos, dependent: :destroy
-  has_many :shared_users, through: :shared_videos, source: :user
 
   validates :title, presence: true
   validates :file, presence: true
