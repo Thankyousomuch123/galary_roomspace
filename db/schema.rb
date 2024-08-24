@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_23_193647) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_24_153701) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -57,6 +57,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_23_193647) do
     t.index ["album_id"], name: "index_photos_on_album_id"
   end
 
+  create_table "sharings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "shareable_type", null: false
+    t.bigint "shareable_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "shared_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "shared_user_id"
+    t.index ["shareable_type", "shareable_id"], name: "index_sharings_on_shareable"
+    t.index ["shared_user_id"], name: "index_sharings_on_shared_user_id"
+    t.index ["user_id"], name: "index_sharings_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -85,5 +98,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_23_193647) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "albums", "users"
   add_foreign_key "photos", "albums"
+  add_foreign_key "sharings", "users"
   add_foreign_key "videos", "albums"
 end

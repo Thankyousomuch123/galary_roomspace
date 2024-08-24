@@ -31,9 +31,27 @@ class PhotosController < ApplicationController
   end
 
   def share
-    # Ensure that sharing functionality is appropriate for photos
-    @users = User.where.not(id: current_user.id)
+    @photo = Photo.find(params[:id])
+    users = User.where(id: params[:user_ids])
+
+    # Track the success of each Sharing record creation
+    all_saved = true
+
+    users.each do |user|
+      sharing = Sharing.create(shareable: @photo, user: user, shared_at: Time.current, shared_user_id: current_user.id)
+      unless sharing.persisted?  # Check if the record was saved successfully
+        all_saved = false
+        # Optionally, handle the specific errors if needed
+      end
+    end
+
+    if all_saved
+      render json: { message: 'Photo shared successfully' }, status: :ok
+    else
+      render json: { error: 'Failed to share Photo' }, status: :unprocessable_entity
+    end
   end
+
 
   def destroy
     if @photo.destroy

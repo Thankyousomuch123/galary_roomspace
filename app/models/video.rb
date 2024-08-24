@@ -5,6 +5,7 @@ class Video < ApplicationRecord
   validates :title, presence: true
   validates :file, presence: true
   validate :video_format
+  has_many :sharings, as: :shareable
 
   def video_format
     if file.attached?

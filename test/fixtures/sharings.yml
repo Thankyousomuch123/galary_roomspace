@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  shareable: one
+  shareable_type: Shareable
+  user: one
+  shared_at: 2024-08-24 16:13:07
+
+two:
+  shareable: two
+  shareable_type: Shareable
+  user: two
+  shared_at: 2024-08-24 16:13:07
