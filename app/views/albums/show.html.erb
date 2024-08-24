@@ -1,43 +1,55 @@
 <h1><%= @album.name %></h1>
 
-  <%= link_to 'Edit Album', edit_album_path(@album), class: 'btn btn-edit album-actions' %>
-  
+<%= link_to "Edit #{@album.album_type.capitalize} Album", edit_album_path(@album), class: 'btn btn-edit album-actions' %>
 
 <div class="album-details">
   <p>
     <% if @album.avatar.attached? %>
       <div class="avatar-container">
         <%= image_tag @album.avatar, class: 'album-avatar' %>
-        <%= button_to 'Remove Avatar', purge_avatar_album_path(@album), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-remove-avatar' %>
+        <%= button_to "Remove Avatar", purge_avatar_album_path(@album), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-remove-avatar' %>
       </div>
     <% else %>
       <span>No avatar uploaded.</span>
     <% end %>
   </p>
   <div class="photo-actions">
-    <%= link_to 'Add Photo', new_album_photo_path(@album), class: 'btn btn-add-photo' %>
-    <%= link_to 'Share Album', share_album_path(@album), class: 'btn btn-share-album' %>
+    <% if @album.album_type == 'photo' %>
+      <%= link_to "Add #{@album.album_type.capitalize}", new_album_photo_path(@album), class: 'btn btn-add-photo' %>
+    <% else %>
+      <%= link_to "Add #{@album.album_type.capitalize}", new_album_video_path(@album), class: 'btn btn-add-photo' %>
+    <% end %>  
+    <%= link_to "Share #{@album.album_type.capitalize} Album", share_album_path(@album), class: 'btn btn-share-album' %>
     <%= link_to 'Back to Albums', albums_path, class: 'btn btn-back album-actions' %>
   </div>
 </div>
 
-<h2>Photos</h2>
-
+<h2><%= @album.album_type.capitalize.pluralize %></h2>
 
 <div class="photo-list">
   <% @album.photos.each do |photo| %>
     <div class="photo-item">
-      <%= image_tag photo.image, class: 'photo-image' if photo.image.attached? %>
+      <% if @album.album_type == 'photo' && photo.image.attached? %>
+        <%= image_tag photo.image, class: 'photo-image' %>
+      <% elsif @album.album_type == 'video' && photo.video.attached? %>
+        <%= video_tag photo.video, controls: true, class: 'photo-image' %>
+      <% end %>
       <p class="photo-title"><%= photo.title %></p>
       <div class="photo-actions">
-        <%= link_to share_album_photo_path(@album, photo), class: 'btn btn-icon', title: "Share Photo" do %>
+        <%= link_to share_album_photo_path(@album, photo), class: 'btn btn-icon', title: "Share #{@album.album_type.capitalize}" do %>
           <i class="fas fa-share-alt"></i>
         <% end %>
-        <% if photo.image.attached? && photo.album.user == current_user %>
-          <%= link_to rails_blob_path(photo.image, disposition: "inline"), class: "view-photo-link btn btn-icon", data: { photo_url: rails_blob_path(photo.image, disposition: "inline") }, title: "View Photo" do %>
-            <i class="fas fa-eye"></i>
+        <% if (photo.image.attached? || photo.video.attached?) && photo.album.user == current_user %>
+          <% if @album.album_type == 'photo' %>
+            <%= link_to rails_blob_path(photo.image, disposition: "inline"), class: "view-photo-link btn btn-icon", data: { photo_url: rails_blob_path(photo.image, disposition: "inline") }, title: "View Photo" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
+          <% elsif @album.album_type == 'video' %>
+            <%= link_to rails_blob_path(photo.video, disposition: "inline"), class: "view-photo-link btn btn-icon", data: { video_url: rails_blob_path(photo.video, disposition: "inline") }, title: "View Video" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
           <% end %>
-          <%= button_to album_photo_path(@album, photo), method: :delete, data: { confirm: 'Are you sure you want to delete this photo?' }, class: 'btn btn-icon', title: "Delete Photo" do %>
+          <%= button_to album_photo_path(@album, photo), method: :delete, data: { confirm: 'Are you sure you want to delete this item?' }, class: 'btn btn-icon', title: "Delete #{@album.album_type.capitalize}" do %>
             <i class="fas fa-trash-alt"></i>
           <% end %>
         <% end %>
@@ -51,11 +63,12 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="photoModalLabel">Photo</h5>
+        <h5 class="modal-title" id="photoModalLabel"><%= @album.album_type.capitalize %></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <img id="photoModalImage" src="" alt="Photo" class="img-fluid">
+        <img id="photoModalImage" src="" alt="<%= @album.album_type.capitalize %>" class="img-fluid" style="display: none;">
+        <video id="photoModalVideo" controls class="img-fluid" style="display: none;"></video>
       </div>
     </div>
   </div>
@@ -65,12 +78,18 @@
   $(document).ready(function() {
     $('.view-photo-link').on('click', function(e) {
       e.preventDefault(); // Prevent the default link behavior
-      
+
       var photoUrl = $(this).data('photo-url'); // Get the photo URL from the data attribute
-      
-      // Set the photo URL in the modal's image tag
-      $('#photoModalImage').attr('src', photoUrl);
-      
+      var videoUrl = $(this).data('video-url'); // Get the video URL from the data attribute
+
+      if (photoUrl) {
+        $('#photoModalImage').attr('src', photoUrl).show();
+        $('#photoModalVideo').hide();
+      } else if (videoUrl) {
+        $('#photoModalVideo').attr('src', videoUrl).show();
+        $('#photoModalImage').hide();
+      }
+
       // Show the modal
       $('#photoModal').modal('show');
     });
