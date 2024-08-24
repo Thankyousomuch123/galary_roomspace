@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
   before_action :set_album
-  before_action :set_photo, only: %i[show edit update destroy share update_share]
+  before_action :set_photo, only: %i[show edit update destroy share]
   before_action :authenticate_user!
   before_action :authorize_user!, only: %i[destroy]
 
@@ -34,7 +34,7 @@ class PhotosController < ApplicationController
     # Ensure that sharing functionality is appropriate for photos
     @users = User.where.not(id: current_user.id)
   end
-  
+
   def destroy
     if @photo.destroy
       redirect_to album_path(@album), notice: 'Photo was successfully deleted.'

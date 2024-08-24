@@ -1,6 +1,6 @@
 class VideosController < ApplicationController
   before_action :set_album
-  before_action :set_video, only: %i[show edit update destroy share update_share]
+  before_action :set_video, only: %i[show edit update destroy share]
   before_action :authenticate_user!
   before_action :authorize_user!, only: %i[destroy]
 
