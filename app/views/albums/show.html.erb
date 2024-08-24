@@ -1,5 +1,5 @@
 <h1><%= @album.name %></h1>
-
+<%= hidden_field_tag 'album_id', @album.id %>
 <div class="album-details">
   <p>
     <% if @album.avatar.attached? %>
@@ -97,6 +97,9 @@
       <div class="modal-body">
         <form id="shareForm">
           <div class="form-group">
+            <label for="selectAllUsers">
+              <input type="checkbox" id="selectAllUsers"> Select All Users
+            </label>
             <label for="users">Select Users:</label>
             <select id="users" name="user_ids[]" class="form-control" multiple="multiple">
               <% @users.each do |user| %>
@@ -111,69 +114,110 @@
   </div>
 </div>
 
+
+
 <script>
-  $(document).ready(function() {
-    // Show the view modal with image or video
-    $('.btn-view-photo, .btn-view-video').on('click', function(e) {
-      e.preventDefault();
+ $(document).ready(function() {
 
-      var mediaUrl = $(this).data('photo-url') || $(this).data('video-url');
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-      if ($(this).hasClass('btn-view-photo')) {
-        $('#viewModalImage').attr('src', mediaUrl).show();
-        $('#viewModalVideo').hide();
-      } else {
-        $('#viewModalVideo').attr('src', mediaUrl).show();
-        $('#viewModalImage').hide();
-      }
+  // Show the view modal with image or video
+  $('.btn-view-photo, .btn-view-video').on('click', function(e) {
+    e.preventDefault();
 
-      $('#viewModal').modal('show');
-    });
+    var mediaUrl = $(this).data('photo-url') || $(this).data('video-url');
 
-    // Show the share modal and set the type
-    $('.btn-share-photo, .btn-share-video, .btn-share-album').on('click', function(e) {
-      e.preventDefault();
-      
-      var type;
-      if ($(this).hasClass('btn-share-photo')) {
-        type = 'photo';
-      } else if ($(this).hasClass('btn-share-video')) {
-        type = 'video';
-      } else if ($(this).hasClass('btn-share-album')) {
-        type = 'album';
-      }
-      
-      var id = $(this).data(type + '-id');
-      
-      $('#shareModalType').text(type.charAt(0).toUpperCase() + type.slice(1));
-      $('#shareForm').data('type', type).data('id', id);
-      $('#shareModal').modal('show');
-    });
+    if ($(this).hasClass('btn-view-photo')) {
+      $('#viewModalImage').attr('src', mediaUrl).show();
+      $('#viewModalVideo').hide();
+    } else {
+      $('#viewModalVideo').attr('src', mediaUrl).show();
+      $('#viewModalImage').hide();
+    }
 
-    // Handle share form submission
-    $('#shareForm').on('submit', function(e) {
-      e.preventDefault();
+    $('#viewModal').modal('show');
+  });
 
-      var type = $(this).data('type');
-      var id = $(this).data('id');
-      var user_ids = $('#users').val(); // Use val() for multiple selects
+  // Show the share modal and set the type
+  $('.btn-share-photo, .btn-share-video, .btn-share-album').on('click', function(e) {
+    e.preventDefault();
+    
+    var type;
+    if ($(this).hasClass('btn-share-photo')) {
+      type = 'photo';
+    } else if ($(this).hasClass('btn-share-video')) {
+      type = 'video';
+    } else if ($(this).hasClass('btn-share-album')) {
+      type = 'album';
+    }
+    
+    var id = $(this).data(type + '-id');
+    
+    $('#shareModalType').text(type.charAt(0).toUpperCase() + type.slice(1));
+    $('#shareForm').data('type', type).data('id', id);
+    $('#shareModal').modal('show');
+  });
 
-      $.ajax({
-        url: '/share/' + type + '/' + id,
-        method: 'PATCH', // PATCH is typically used for updates
-        data: {
-          user_ids: user_ids
-        },
-        success: function(response) {
+  // Handle share form submission
+  $('#shareForm').on('submit', function(e) {
+    e.preventDefault();
+
+    var type = $(this).data('type');
+    var id = $(this).data('id');
+    var user_ids = $('#users').val();
+    var album_id = $('input[name="album_id"]').val();
+    var capitalizedType = capitalizeFirstLetter(type);
+
+    var url;
+    if (type === 'photo') {
+      url = '/albums/' + album_id + '/photos/' + id + '/share';
+    } else if (type === 'video') {
+      url = '/albums/' + album_id + '/videos/' + id + '/share';
+    } else if (type === 'album') {
+      url = '/albums/' + album_id + '/share';
+    }
+
+    $.ajax({
+      url: url,
+      method: 'PATCH',
+      data: {
+        user_ids: user_ids, type: type
+      },
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function(response) {
+        $('#shareModal').modal('hide'); // Hide the modal on success
+        alert(response.message); // Show success message
+      },
+      error: function(xhr) {
+        $('#shareModal').modal('hide'); // Hide the modal on error
+        var errorResponse = JSON.parse(xhr.responseText);
+        alert(errorResponse.error); // Show error message
+
+        if (errorResponse.error === capitalizedType + ' has already been shared') {
           $('#shareModal').modal('hide');
-          alert('Successfully shared the ' + type + '!');
-        },
-        error: function(xhr) {
-          alert('An error occurred while sharing the ' + type + '.');
+          alert(errorResponse.error); // Show error message
         }
-      });
+      }
     });
   });
+
+  // Handle the "Select All Users" checkbox
+  $('#selectAllUsers').on('change', function() {
+    $('#users option').prop('selected', $(this).is(':checked'));
+  });
+
+  // Reset the checkbox and user selection when the modal is hidden
+  $('#shareModal').on('hidden.bs.modal', function() {
+    $('#selectAllUsers').prop('checked', false); // Uncheck the "Select All" checkbox
+    $('#users').val([]); // Deselect all options
+  });
+});
+
+
 </script>
 
 <!-- Styles -->

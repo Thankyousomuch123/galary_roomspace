@@ -31,8 +31,25 @@ class VideosController < ApplicationController
   end
 
   def share
-    # Ensure that sharing functionality is appropriate for videos
-    @users = User.where.not(id: current_user.id)
+    @video = Video.find(params[:id])
+    users = User.where(id: params[:user_ids])
+
+    # Track the success of each Sharing record creation
+    all_saved = true
+
+    users.each do |user|
+      sharing = Sharing.create(shareable: @video, user: user, shared_at: Time.current, shared_user_id: current_user.id)
+      unless sharing.persisted?  # Check if the record was saved successfully
+        all_saved = false
+        # Optionally, handle the specific errors if needed
+      end
+    end
+
+    if all_saved
+      render json: { message: 'Video shared successfully' }, status: :ok
+    else
+      render json: { error: 'Failed to share Video' }, status: :unprocessable_entity
+    end
   end
 
 

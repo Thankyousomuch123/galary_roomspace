@@ -2,6 +2,7 @@ class Album < ApplicationRecord
   belongs_to :user
   has_many :photos, dependent: :destroy
   has_many :videos, dependent: :destroy
+  has_many :sharings, as: :shareable
 
   validates :album_type, inclusion: { in: ['photo', 'video'] }
 

@@ -5,6 +5,7 @@ class Photo < ApplicationRecord
   validates :title, presence: true
   validates :image, presence: true
   validate :image_format
+  has_many :sharings, as: :shareable
 
   def image_format
     if image.attached?

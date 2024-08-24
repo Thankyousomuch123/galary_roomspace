@@ -1,7 +1,9 @@
-<h1>Your Albums</h1>
 
 <%= link_to 'New Photo Album', new_album_path(album_type: 'photo'), class: 'btn btn-primary' %>
 <%= link_to 'New Video Album', new_album_path(album_type: 'video'), class: 'btn btn-secondary' %>
+
+<h1>Your Albums</h1>
+
 
 <h2>Photo Albums</h2>
 <div class="album-list">
@@ -91,10 +93,12 @@
   }
 
   .btn-primary {
+    margin-top: 2%;
     background-color: #007bff;
   }
 
   .btn-secondary {
+    margin-top: 2%;
     background-color: #6c757d;
   }
 
