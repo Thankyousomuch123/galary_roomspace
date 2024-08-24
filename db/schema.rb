@@ -57,33 +57,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_23_193647) do
     t.index ["album_id"], name: "index_photos_on_album_id"
   end
 
-  create_table "shared_albums", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "album_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["album_id"], name: "index_shared_albums_on_album_id"
-    t.index ["user_id"], name: "index_shared_albums_on_user_id"
-  end
-
-  create_table "shared_photos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "photo_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["photo_id"], name: "index_shared_photos_on_photo_id"
-    t.index ["user_id"], name: "index_shared_photos_on_user_id"
-  end
-
-  create_table "shared_videos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "video_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_shared_videos_on_user_id"
-    t.index ["video_id"], name: "index_shared_videos_on_video_id"
-  end
-
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -112,11 +85,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_23_193647) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "albums", "users"
   add_foreign_key "photos", "albums"
-  add_foreign_key "shared_albums", "albums"
-  add_foreign_key "shared_albums", "users"
-  add_foreign_key "shared_photos", "photos"
-  add_foreign_key "shared_photos", "users"
-  add_foreign_key "shared_videos", "users"
-  add_foreign_key "shared_videos", "videos"
   add_foreign_key "videos", "albums"
 end
