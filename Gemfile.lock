@@ -112,6 +112,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.1.2)
+    dotenv-rails (3.1.2)
+      dotenv (= 3.1.2)
+      railties (>= 6.1)
     erubi (1.13.0)
     faraday (2.10.1)
       faraday-net_http (>= 2.0, < 3.2)
@@ -316,6 +320,7 @@ DEPENDENCIES
   capybara
   debug
   devise (~> 4.9)
+  dotenv-rails
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
