@@ -6,9 +6,15 @@
     <% if @shared_photos.any? %>
       <% @shared_photos.each do |photo| %>
         <div class="media-card">
-          <%= image_tag photo.image, class: 'shared-media-image' %>
-          <% shared_user_id = photo.sharings.first.shared_user_id %>
-          <p class="media-details">Shared by: <%= User.find(shared_user_id).email %> at <%= photo.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') %></p>
+          <% if photo.image.attached? %>
+            <%= image_tag photo.image, class: 'shared-media-image' %>
+          <% else %>
+            <p class="media-details">Image not available</p>
+          <% end %>
+          <% shared_user_id = photo.sharings.first.shared_user_id if photo.sharings.any? %>
+          <p class="media-details">
+            Shared by: <%= User.find(shared_user_id).email if shared_user_id.present? %> at <%= photo.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') if photo.sharings.any? %>
+          </p>
         </div>
       <% end %>
     <% else %>
@@ -23,9 +29,15 @@
     <% if @shared_videos.any? %>
       <% @shared_videos.each do |video| %>
         <div class="media-card">
-          <%= video_tag video.file, controls: true, class: 'shared-media-video' %>
-          <% shared_user_id = video.sharings.first.shared_user_id %>
-          <p class="media-details">Shared by: <%= User.find(shared_user_id).email %> at <%= video.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') %></p>
+          <% if video.file.attached? %>
+            <%= video_tag video.file, controls: true, class: 'shared-media-video' %>
+          <% else %>
+            <p class="media-details">Video not available</p>
+          <% end %>
+          <% shared_user_id = video.sharings.first.shared_user_id if video.sharings.any? %>
+          <p class="media-details">
+            Shared by: <%= User.find(shared_user_id).email if shared_user_id.present? %> at <%= video.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') if video.sharings.any? %>
+          </p>
         </div>
       <% end %>
     <% else %>
@@ -41,8 +53,10 @@
       <% @shared_albums.each do |album| %>
         <div class="media-card">
           <%= link_to album.name, album_path(album), class: 'shared-album-link' %>
-          <% shared_user_id = album.sharings.first.shared_user_id %>
-          <p class="media-details">Shared by: <%= User.find(shared_user_id).email %> at <%= album.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') %></p>
+          <% shared_user_id = album.sharings.first.shared_user_id if album.sharings.any? %>
+          <p class="media-details">
+            Shared by: <%= User.find(shared_user_id).email if shared_user_id.present? %> at <%= album.sharings.first.shared_at.strftime('%Y-%m-%d %H:%M:%S') if album.sharings.any? %>
+          </p>
         </div>
       <% end %>
     <% else %>
@@ -51,80 +65,78 @@
   </div>
 </div>
 
-
 <style>
- /* General Styles */
-.shared-items-heading {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 20px;
-}
+  /* General Styles */
+  .shared-items-heading {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
 
-.media-section {
-  margin-bottom: 30px;
-}
+  .media-section {
+    margin-bottom: 30px;
+  }
 
-.media-container {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  padding: 10px;
-  gap: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  max-height: 400px; /* Adjust as needed */
-}
+  .media-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px;
+    gap: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 400px; /* Adjust as needed */
+  }
 
-.photo-container, .video-container, .album-container {
-  max-height: 400px; /* Adjust as needed */
-  overflow-y: auto;
-}
+  .photo-container, .video-container, .album-container {
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+  }
 
-.media-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  flex: 0 0 auto; /* Prevent flex items from shrinking */
-  width: 220px; /* Adjust card width as needed */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  overflow: hidden; /* Ensures content doesn't overflow the card */
-}
+  .media-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto; /* Prevent flex items from shrinking */
+    width: 220px; /* Adjust card width as needed */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden; /* Ensures content doesn't overflow the card */
+  }
 
-.shared-media-image, .shared-media-video {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
+  .shared-media-image, .shared-media-video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
 
-.media-details {
-  font-size: 0.875rem;
-  color: #666;
-  margin: 0;
-  word-wrap: break-word; /* Ensures text wraps within the card */
-  text-align: center; /* Centers the text within the card */
-}
+  .media-details {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0;
+    word-wrap: break-word; /* Ensures text wraps within the card */
+    text-align: center; /* Centers the text within the card */
+  }
 
-.no-media-message {
-  font-size: 1rem;
-  color: #999;
-}
+  .no-media-message {
+    font-size: 1rem;
+    color: #999;
+  }
 
-.shared-album-link {
-  font-size: 1.25rem;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-}
+  .shared-album-link {
+    font-size: 1.25rem;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
 
-.shared-album-link:hover {
-  text-decoration: underline;
-}
-
+  .shared-album-link:hover {
+    text-decoration: underline;
+  }
 </style>
